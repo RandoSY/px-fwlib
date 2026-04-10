@@ -23,8 +23,6 @@
 #include "px_log_ft.h"
 #if PX_LOG_FT
 
-#include "px_log.h"
-
 /* _____LOCAL DEFINITIONS____________________________________________________ */
 /// Magic value to indicate that buffer has been initialized and has valid content
 #define PX_LOG_FT_MARKER    0xdeadc0de
@@ -55,10 +53,8 @@ PX_LOG_FT_CFG_NAMES()
 #ifdef PX_LOG_FT_CFG_NAMES
 const char * px_log_ft_name_to_str(px_log_ft_name_t name)
 {
-    if(name >= PX_LENGTHOF_ARRAY(px_log_ft_name_str))
-    {
-        return "";
-    }
+    if(name >= PX_LENGTHOF_ARRAY(px_log_ft_name_str)) return "?";
+
     return px_log_ft_name_str[name];
 }
 #endif
@@ -82,10 +78,7 @@ void _px_log_ft_tag(const px_log_ft_name_t name, uint16_t line)
 
     px_log_ft.buf[px_log_ft.idx] = ft;
 
-    if(++px_log_ft.idx == PX_LOG_FT_CFG_BUF_SIZE)
-    {
-        px_log_ft.idx = 0;
-    }
+    if(++px_log_ft.idx == PX_LOG_FT_CFG_BUF_SIZE) px_log_ft.idx = 0;
 }
 
 void _px_log_ft_tag_param(const px_log_ft_name_t name, uint16_t line, uint8_t param)
@@ -94,13 +87,10 @@ void _px_log_ft_tag_param(const px_log_ft_name_t name, uint16_t line, uint8_t pa
 
     px_log_ft.buf[px_log_ft.idx] = ft;
 
-    if(++px_log_ft.idx == PX_LOG_FT_CFG_BUF_SIZE)
-    {
-        px_log_ft.idx = 0;
-    }
+    if(++px_log_ft.idx == PX_LOG_FT_CFG_BUF_SIZE) px_log_ft.idx = 0;
 }
 
-void px_log_ft_report(void)
+void _px_log_ft_report(void)
 {
     uint8_t  idx = px_log_ft.idx;
     uint8_t  name, param;
@@ -111,21 +101,16 @@ void px_log_ft_report(void)
 
     do
     {
-        if(idx != 0)
-        {
-            idx--;
-        }
-        else
-        {
-            idx = PX_LOG_FT_CFG_BUF_SIZE - 1;
-        }
+        if(idx != 0) idx--;
+        else         idx = PX_LOG_FT_CFG_BUF_SIZE - 1;
+
         param = (px_log_ft.buf[idx] >> 24) & 0xff;
         name  = (px_log_ft.buf[idx] >> 16) & 0xff;
         line  = (px_log_ft.buf[idx] >>  0) & 0xffff;
 #ifdef PX_LOG_FT_CFG_NAMES
-        PX_LOG_TRACE("%u %s # %u (%u)\n", name, px_log_ft_name_to_str((px_log_ft_name_t)name), line, param);
+        PX_LOG_FT_PRINTF("%u %s # %u (%u)\n", name, px_log_ft_name_to_str((px_log_ft_name_t)name), line, param);
 #else
-        PX_LOG_TRACE("%u # %u (%u)\n", name, line, param);
+        PX_LOG_FT_PRINTF("%u # %u (%u)\n", name, line, param);
 #endif
     }
     while(idx != px_log_ft.idx);

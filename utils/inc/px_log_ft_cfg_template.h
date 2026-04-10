@@ -39,6 +39,16 @@
 /// Debug output string buffer size
 #define PX_LOG_FT_CFG_BUF_SIZE 16
 
+/// Direct report output
+#if 0
+#include <stdio.h>
+#define PX_LOG_FT_PRINTF(format, ...)    printf(format, ## __VA_ARGS__)
+#endif
+#if 0
+#include "px_log.h"
+#define PX_LOG_FT_PRINTF(format, ...)    PX_LOG_TRACE(format, ## __VA_ARGS__)
+#endif
+
 /// Customized name values (must be sequential starting at 0, e.g. 0, 1, 2, 3, ...)
 typedef enum
 {

@@ -97,7 +97,7 @@ void _px_log_ft_tag_param(const px_log_ft_name_t name, uint16_t line, uint8_t pa
 /**
  *  Report flow trace log.
  */
-void px_log_ft_report(void);
+void _px_log_ft_report(void);
 
 /* _____MACROS_______________________________________________________________ */
 // PX_LOG_FT enabled?
@@ -111,6 +111,14 @@ void px_log_ft_report(void);
     do \
     { \
         _px_log_ft_init(); \
+    } \
+    while(0)
+
+/// Macro to Report flow trace log
+#define PX_LOG_FT_REPORT() \
+    do \
+    { \
+        _px_log_ft_report(); \
     } \
     while(0)
 
@@ -150,6 +158,7 @@ void px_log_ft_report(void);
     // PX_LOG_FT = 0; Remove debug flow trace code
     #define PX_LOG_FT_NAME(name)
     #define PX_LOG_FT_INIT()
+    #define PX_LOG_FT_REPORT()
     #define PX_LOG_FT_TAG()
     #define PX_LOG_FT_TAG_LINE(line)
     #define PX_LOG_FT_TAG_PARAM(param)
