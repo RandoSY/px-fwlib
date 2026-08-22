@@ -1,0 +1,39 @@
+/**
+ *  @page WEACT_STM32G030_ADC_METER WeAct STM32G030 12-bit ADC meter
+ *
+ *  This application provides a low-cost voltage measurement interface:
+ *
+ *  - PA0 is the 12-bit ADC input.
+ *  - PA14 or a serial command starts a measurement.
+ *  - PA1 drives an external red LED, representing binary 0.
+ *  - PA2 drives an external green LED, representing binary 1.
+ *  - PA3 drives a piezo buzzer or a transistor input.
+ *  - USART1 on PA11/PA12 provides the terminal and machine-readable output.
+ *
+ *  LED outputs are active-high and must use current-limiting resistors. After
+ *  each conversion, all 12 ADC bits are displayed serially from MSB to LSB;
+ *  exactly one LED is on for each bit, with GREEN=1 and RED=0. Do not connect
+ *  a magnetic buzzer directly to the GPIO; use a piezo transducer or a
+ *  transistor driver. The ADC input must remain between 0 V and VDD.
+ *
+ *  The default ADC reference is 3300 mV. Use `v 3300` at the terminal to set a
+ *  different assumed VREF for the displayed voltage calculation.
+ *
+ *  Build the STM32G030x6 image with:
+ *
+ *      make build=debug
+ *
+ *  Build the STM32G030x8 image with:
+ *
+ *      make build=debug FLASH_SIZE=64k
+ *
+ *  Terminal commands:
+ *
+ *  - `m` or a blank command: take one measurement
+ *  - `h`, `help`, or `?`: show help
+ *  - `c`: toggle continuous measurement mode
+ *  - `q`: stop continuous mode
+ *  - `s`: show status and timing settings
+ *  - `d`: toggle verbose debug messages
+ *  - `v <mV>`: set the assumed ADC reference voltage
+ */

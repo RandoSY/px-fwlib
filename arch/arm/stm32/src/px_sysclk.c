@@ -6,10 +6,10 @@
     |_|     |___|  \____|  \___/  |_| \_|  \___/  |_|  |_| |___| /_/\_\
 
     Copyright (c) 2018 Pieter Conradie <https://piconomix.com>
- 
+
     License: MIT
     https://github.com/piconomix/px-fwlib/blob/master/LICENSE.md
-    
+
     Title:          px_sysclk.h : System Clock using the SysTick peripheral
     Author(s):      Pieter Conradie
     Creation Date:  2018-03-06
@@ -24,7 +24,19 @@
 #include "px_stm32cube.h"
 
 #if PX_SYSCLK_CFG_STMCUBE_HAL_TMR
+#if defined(STM32C0)
+#include "stm32c0xx_hal.h"
+#elif defined(STM32G0)
+#include "stm32g0xx_hal.h"
+#elif defined(STM32L0)
 #include "stm32l0xx_hal.h"
+#elif defined(STM32L1)
+#include "stm32l1xx_hal.h"
+#elif defined(STM32L4)
+#include "stm32l4xx_hal.h"
+#else
+#error "Unsupported STM32 series for STM32Cube HAL SysTick support"
+#endif
 #endif
 
 /* _____LOCAL DEFINITIONS____________________________________________________ */

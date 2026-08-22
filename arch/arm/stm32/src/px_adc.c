@@ -27,6 +27,13 @@
 /* _____LOCAL DEFINITIONS____________________________________________________ */
 PX_LOG_NAME("px_adc");
 
+/* STM32G0 names its single ADC clock gate ADC; older families use ADC1. */
+#if defined(STM32G0)
+#define PX_ADC_LL_CLOCK_PERIPH       LL_APB2_GRP1_PERIPH_ADC
+#else
+#define PX_ADC_LL_CLOCK_PERIPH       LL_APB2_GRP1_PERIPH_ADC1
+#endif
+
 /// Internal data for each ADC handle
 typedef struct px_adc_per_s
 {
@@ -56,7 +63,7 @@ static void px_adc_init_per(ADC_TypeDef * adc_base_adr,
     {
 #if PX_ADC_CFG_ADC1_EN
     case PX_ADC_NR_1:
-        LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_ADC1);
+        LL_APB2_GRP1_EnableClock(PX_ADC_LL_CLOCK_PERIPH);
         break;
 #endif
     default:
@@ -82,7 +89,13 @@ static void px_adc_init_per(ADC_TypeDef * adc_base_adr,
     // Enable regulator
     LL_ADC_EnableInternalRegulator(adc_base_adr);
     // Set ADC sampling time
+#if defined(STM32G0)
+    LL_ADC_SetSamplingTimeCommonChannels(adc_base_adr,
+                                         LL_ADC_SAMPLINGTIME_COMMON_1,
+                                         PX_ADC_CFG_SAMPLE_TIME);
+#else
     LL_ADC_SetSamplingTimeCommonChannels(adc_base_adr, PX_ADC_CFG_SAMPLE_TIME);
+#endif
     // Set ADC resolution
     LL_ADC_SetResolution(adc_base_adr, PX_ADC_CFG_RES_12_BITS << ADC_CFGR1_RES_Pos);
     // Set ADC oversampling and shift
@@ -220,7 +233,7 @@ bool px_adc_close(px_adc_handle_t * handle)
     {
 #if PX_ADC_CFG_ADC1_EN
     case PX_ADC_NR_1:
-        LL_APB2_GRP1_DisableClock(LL_APB2_GRP1_PERIPH_ADC1);
+        LL_APB2_GRP1_DisableClock(PX_ADC_LL_CLOCK_PERIPH);
         break;
 #endif
     default:

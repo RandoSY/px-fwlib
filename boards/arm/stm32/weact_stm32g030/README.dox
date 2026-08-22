@@ -1,0 +1,27 @@
+/**
+ *  @page WEACT_STM32G030 WeAct STM32G030 Core Board
+ *
+ *  This board support package targets the WeAct Studio STM32G0xx/C0xx Core
+ *  Board populated with an STM32G030F6P6 or STM32G030F8P6-compatible device.
+ *
+ *  The board provides:
+ *  - 64 MHz HSI16 + PLL system clock
+ *  - 32.768 kHz LSE crystal on PC14/PC15
+ *  - active-low user LED on PA4
+ *  - active-high user button on PA14
+ *  - SWD on PA13/PA14
+ *  - USART1 on the PA11/PA12 header nets using the STM32G0 pin remap
+ *  - SPI1 on PA5-PA8 header nets; PA4 is the user LED
+ *
+ *  STM32G030x6 devices have 32 KB Flash and STM32G030x8 devices have 64 KB
+ * Flash. The example Makefile defaults to 32 KB and accepts FLASH_SIZE=64k
+ * for the x8 device.
+ *
+ * Examples:
+ * - @subpage WEACT_STM32G030_GPIO
+ * - @subpage WEACT_STM32G030_UART_PRINTF
+ * - @subpage WEACT_STM32G030_ADC_METER
+ *
+ * Applications:
+ * - @subpage WEACT_STM32G030_CLI_EXPLORER
+ */

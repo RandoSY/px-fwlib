@@ -1,0 +1,96 @@
+/**
+ *  @page WEACT_STM32G030_CLI_EXPLORER WeAct STM32G030 CLI Explorer
+ *
+ *  A command-line processor laboratory for the WeAct STM32G030F6P6/F8P6 core
+ *  board. It follows the style of the ST Nucleo and px_hero `cli_explorer`
+ *  applications while using only peripherals present on this board.
+ *
+ *  Build the 32 KB STM32G030x6 image:
+ *
+ *      make build=debug
+ *
+ *  Build the 64 KB STM32G030x8 image:
+ *
+ *      make clean
+ *      make build=debug FLASH_SIZE=64k
+ *
+ *  The terminal is USART1 at 115200 8N1 on PA11 TX and PA12 RX.
+ *
+ *  @section WEACT_STM32G030_CLI_ROOT Root commands
+ *
+ *      help [prefix]          List commands or matching help
+ *      info                   Report device ID, clocks and board pin map
+ *      led on|off|toggle      Control the active-low onboard LED on PA4
+ *      beep <ms> [Hz]         Generate a tone on PA3
+ *      delay <n> [ms|s]       Exercise the calibrated blocking delay
+ *      rst                    Reset the microcontroller
+ *
+ *  @section WEACT_STM32G030_CLI_ADC ADC
+ *
+ *      adc info               Report ADC configuration and channel map
+ *      adc s <ch> [interval]  Sample once or continuously
+ *      adc bin <ch>           Print a 12-bit binary sample
+ *      adc all                Sample PA0 through PA3
+ *      adc v <mV>             Set the voltage scaling reference assumption
+ *
+ *  External ADC channels are 0/PA0, 1/PA1, 2/PA2, and 3/PA3. The driver also
+ *  accepts `ch16`, `ch17`, and `ch18` for the MCU's internal channels when
+ *  supported by the selected silicon. A continuous sample stops on the PA14
+ *  button or on the next received byte.
+ *
+ *  @section WEACT_STM32G030_CLI_GPIO GPIO
+ *
+ *      gpio info <pin|all|regs>
+ *      gpio ci <pin> [pu|pd]
+ *      gpio co <pin> <0|1> [od] [pu]
+ *      gpio af <pin> <0..7>
+ *      gpio ana <pin>
+ *      gpio i <pin>
+ *      gpio o <pin> <0|1>
+ *
+ *  Pins use names such as `a0`, `b0`, `c14`, or these aliases: `led`, `button`,
+ *  `adc0`..`adc3`, `spi_cs`, `spi_sck`, `spi_miso`, and `spi_mosi`.
+ *  `gpio info regs` reports the GPIOA/B/C register state.
+ *
+ *  @section WEACT_STM32G030_CLI_UART UART
+ *
+ *      uart info
+ *      uart cfg 1 <baud> [7|8|9] [n|o|e] [1|2]
+ *      uart w <d0> .. [d15]
+ *      uart r <count> <timeout ms>
+ *      uart x <count> <timeout ms> <d0> .. [d15]
+ *      uart s <timeout ms> <string> [cr|lf|crlf]
+ *      uart err
+ *
+ *  UART test commands use the same USART1 as the CLI. Add an external TX-to-RX
+ *  loopback wire if testing receive or exchange commands. Reconfiguring the
+ *  port also reconfigures the command terminal.
+ *
+ *  @section WEACT_STM32G030_CLI_SPI SPI
+ *
+ *      spi cfg [1] [cs] [baud] [mode] [lsb|msb]
+ *      spi cs lo|hi
+ *      spi w <d0> .. [d7]
+ *      spi r <count>
+ *      spi x <d0> .. [d7]
+ *
+ *  SPI1 uses PA5 SCK, PA6 MISO, PA7 MOSI, and PA8 as the default manual CS.
+ *  The application supports one SPI peripheral and a user-selectable GPIO CS.
+ *
+ *  @section WEACT_STM32G030_CLI_RTC RTC
+ *
+ *      rtc r
+ *      rtc w <yy-mm-dd> <hh:mm:ss>
+ *
+ *  The board LSE on PC14/PC15 is used as the RTC clock source.
+ *
+ *  @section WEACT_STM32G030_CLI_MEM Memory
+ *
+ *      mem r <b|w|l> <address> [count]
+ *      mem w <b|w|l> <address> <d0> .. [d7]
+ *      mem d <address> <number of bytes>
+ *
+ *  These commands intentionally expose the memory-mapped processor address
+ *  space for hardware investigation. Invalid addresses or writes to protected
+ *  registers can fault or change the board state; use the reference manual.
+ */
